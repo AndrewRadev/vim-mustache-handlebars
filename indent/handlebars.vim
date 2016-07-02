@@ -38,7 +38,7 @@ let b:did_indent = 1
 let b:did_indent_hbs = 1
 
 setlocal indentexpr=GetHandlebarsIndent()
-setlocal indentkeys=o,O,*<Return>,<>>,{,},0),0],o,O,!^F,=end,=else,=elsif,=rescue,=ensure,=when
+setlocal indentkeys=o,O,*<Return>,<Return>,<>>,{,},0),0],o,O,!^F,=end,=else,=elsif,=rescue,=ensure,=when
 
 " Only define the function once.
 if exists("*GetHandlebarsIndent")
@@ -93,6 +93,13 @@ function! GetHandlebarsIndent(...)
   endif
   " indent again after {{else}}
   if line =~# '\v^\s*\{\{else.*\}\}\s*$'
+    let ind = ind + sw
+  endif
+  " Indent after an opened and unclosed {{
+  " - previous line opens a {{
+  " - previous line doesn't end in }}
+  if line =~# '\v\s*\{\{\.*\s*' &&
+        \ line !~# '\v.*\}\}\s*$'
     let ind = ind + sw
   endif
 
