@@ -62,6 +62,7 @@ function! GetHandlebarsIndent(...)
   call cursor(v:lnum,1)
   call cursor(v:lnum,vcol)
   exe "let ind = ".b:handlebars_subtype_indentexpr
+  let sub_ind = ind
 
   " Workaround for Andy Wokula's HTML indent. This should be removed after
   " some time, since the newest version is fixed in a different way.
@@ -95,12 +96,19 @@ function! GetHandlebarsIndent(...)
   if line =~# '\v^\s*\{\{else.*\}\}\s*$'
     let ind = ind + sw
   endif
-  " Indent after an opened and unclosed {{
-  " - previous line opens a {{
-  " - previous line doesn't end in }}
-  if line =~# '\v\s*\{\{\.*\s*' &&
-        \ line !~# '\v.*\}\}\s*$'
+
+  " indent after an opened and unclosed {{
+  if line =~# '^\s*{{' && line !~# '}}'
     let ind = ind + sw
+  endif
+  " unindent after a closing }} without an opening one
+  if line =~# '}}' && line !~# '{{'
+    let ind = ind - sw
+
+    " special case for a closing HTML tag, let HTML handle it
+    if cline =~ '^\s*</\k\+>'
+      return sub_ind
+    endif
   endif
 
   return ind
