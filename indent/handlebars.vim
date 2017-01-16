@@ -79,6 +79,30 @@ function! GetHandlebarsIndent(...)
   " all indent rules only apply if the block opening/closing
   " tag is on a separate line
 
+  " check for a hanging attribute
+  if synIDattr(synID(v:lnum, 1, 1), "name") =~ 'mustache\%(Inside\|Section\)' &&
+        \ cline =~ '^\s*\k\+='
+    let [line, col] = searchpos('{{\#\=\k\+\s\+\zs\k\+=', 'Wbn', plnum)
+    if line == plnum
+      return col - 1
+    endif
+  endif
+
+  " check for a closing }}, indent according to the opening one
+  if pline =~# '}}$' && pline !~# '^\s*{{'
+    " Is it a block component?
+    let [line, col] = searchpos('{{#', 'Wbn')
+    if line > 0
+      return (col - 1) + sw
+    endif
+
+    " Is it a single component?
+    let [line, col] = searchpos('{{', 'Wbn')
+    if line > 0
+      return (col - 1)
+    endif
+  endif
+
   " indent after block {{#block
   if pline =~# '\v\{\{\#.*\s*' &&
         \ pline !~# '{{#\(.\{}\)\s.\{}}}.*{{\/\1}}'
