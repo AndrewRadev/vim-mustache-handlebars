@@ -80,11 +80,21 @@ function! GetHandlebarsIndent(...)
   " tag is on a separate line
 
   " check for a hanging attribute
-  if synIDattr(synID(v:lnum, 1, 1), "name") =~ 'mustache\%(Inside\|Section\)' &&
-        \ cline =~ '^\s*\k\+='
-    let [line, col] = searchpos('{{\#\=\k\+\s\+\zs\k\+=', 'Wbn', plnum)
-    if line == plnum
-      return col - 1
+  if synIDattr(synID(v:lnum, 1, 1), "name") =~ 'mustache\%(Inside\|Section\)'
+    let hanging_attribute_pattern = '{{\#\=\k\+\s\+\zs\k\+='
+    let just_component_pattern = '^\s*{{\k\+\s*$'
+
+    if pline =~ hanging_attribute_pattern
+      " {{component attribute=value
+      "             other=value}}
+      let [line, col] = searchpos(hanging_attribute_pattern, 'Wbn', plnum)
+      if line == plnum
+        return col - 1
+      endif
+    elseif pline =~ just_component_pattern
+      " {{component
+      "   attribute=value}}
+      return indent(plnum) + sw
     endif
   endif
 
