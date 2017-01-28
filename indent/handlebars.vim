@@ -81,8 +81,8 @@ function! GetHandlebarsIndent(...)
 
   " check for a hanging attribute
   if synIDattr(synID(v:lnum, 1, 1), "name") =~ 'mustache\%(Inside\|Section\)'
-    let hanging_attribute_pattern = '{{\#\=\k\+\s\+\zs\k\+='
-    let just_component_pattern = '^\s*{{\k\+\s*$'
+    let hanging_attribute_pattern = '{{\#\=\%(\k\|[/-]\)\+\s\+\zs\k\+='
+    let just_component_pattern = '^\s*{{\%(\k\|[/-]\)\+\s*$'
 
     if pline =~ hanging_attribute_pattern
       " {{component attribute=value
