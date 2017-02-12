@@ -1,3 +1,10 @@
+This is my own fork of the mustache-handlebars plugin. It includes the following changes:
+
+- A bugfix for single-line block components (https://github.com/mustache/vim-mustache-handlebars/pull/53)
+- Indentation for hanging attributes (https://github.com/mustache/vim-mustache-handlebars/pull/55)
+
+<hr>
+
 mustache and handlebars mode for vim
 ====================================
 
