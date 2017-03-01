@@ -80,7 +80,8 @@ function! GetHandlebarsIndent(...)
   " tag is on a separate line
 
   " check for a hanging attribute
-  if synIDattr(synID(v:lnum, 1, 1), "name") =~ 'mustache\%(Inside\|Section\)'
+  let last_plnum_col = col([plnum, '$']) - 1
+  if synIDattr(synID(plnum, last_plnum_col, 1), "name") =~ '^mustache'
     let hanging_attribute_pattern = '{{\#\=\%(\k\|[/-]\)\+\s\+\zs\k\+='
     let just_component_pattern = '^\s*{{\%(\k\|[/-]\)\+\s*$'
 
