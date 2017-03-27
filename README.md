@@ -3,6 +3,12 @@ This is my own fork of the mustache-handlebars plugin. It includes the following
 - A bugfix for single-line block components (https://github.com/mustache/vim-mustache-handlebars/pull/53)
 - Indentation for hanging attributes (https://github.com/mustache/vim-mustache-handlebars/pull/55)
 
+The [original repo](https://github.com/mustache/vim-mustache-handlebars) of this plugin contributes to [vim-polyglot](https://github.com/sheerun/vim-polyglot).
+In order to use this fork in its place, please make sure to include this in your vimrc:
+```
+let g:polyglot_disabled = ['handlebars']
+```
+
 <hr>
 
 mustache and handlebars mode for vim
