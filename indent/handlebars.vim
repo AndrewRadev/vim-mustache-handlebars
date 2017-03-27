@@ -82,6 +82,7 @@ function! GetHandlebarsIndent(...)
   " check for a hanging attribute
   let last_plnum_col = col([plnum, '$']) - 1
   if synIDattr(synID(plnum, last_plnum_col, 1), "name") =~ '^mustache'
+        \ && pline !~# '}}\s*$'
     let hanging_attribute_pattern = '{{\#\=\%(\k\|[/-]\)\+\s\+\zs\k\+='
     let just_component_pattern = '^\s*{{\%(\k\|[/-]\)\+\s*$'
 
